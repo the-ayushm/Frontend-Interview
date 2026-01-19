@@ -48,11 +48,10 @@ You are required to build a blog application with the following features:
 - ✅ **shadcn/ui** - For UI components
   - 📚 [Documentation](https://ui.shadcn.com/)
 
-## UI Reference
-
+## UI Reference 
 Here's a reference design for the blog application layout:
 
-![Blog Reference](image.png)
+![Blog Reference](image.png)  
 
 **Left Panel:** Blog list view showing blog cards with category, title, and description  
 **Right Panel:** Blog detail view displaying cover image, full content
