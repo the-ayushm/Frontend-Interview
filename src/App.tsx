@@ -1,5 +1,4 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import BlogsList from './pages/BlogsList'
 import BlogDetail from './pages/BlogDetail'
 import BlogForm from './components/BlogForm'
 import { ToastProvider } from './components/ToastProvider'
@@ -13,10 +12,18 @@ function App() {
     <BrowserRouter>
       <ToastProvider>
         <Navbar />
-        <div className="py-6">
-          <header className="text-center mb-8">
-            <h1 className="text-4xl font-extrabold">CA Monk Blog</h1>
-            <p className="text-gray-500 mt-2">Stay updated with the latest trends in finance, accounting, and career growth</p>
+        <div className="py-8">
+          <header className="mx-auto mb-8 max-w-6xl px-4">
+            <div className="rounded-2xl border bg-card p-6 sm:p-8">
+              <div className="max-w-2xl">
+                <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
+                  CA Monk Blog
+                </h1>
+                <p className="mt-2 text-sm text-muted-foreground sm:text-base">
+                  Stay updated with the latest trends in finance, accounting, and career growth.
+                </p>
+              </div>
+            </div>
           </header>
 
           <Routes>

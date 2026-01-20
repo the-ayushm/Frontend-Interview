@@ -2,6 +2,11 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useCreateBlog } from '../lib/hooks/blogs'
 import { useToast } from './ToastProvider'
+import { Card, CardContent, CardHeader } from './ui/card'
+import { Input } from './ui/input'
+import { Textarea } from './ui/textarea'
+import { Label } from './ui/label'
+import { Button } from './ui/button'
 
 export default function BlogForm() {
   const navigate = useNavigate()
@@ -33,37 +38,70 @@ export default function BlogForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-xl">
-      <div className="mb-4">
-        <label className="block text-sm font-medium">Title</label>
-        <input value={title} onChange={(e) => setTitle(e.target.value)} className="mt-1 block w-full border rounded p-2" />
-      </div>
+    <form onSubmit={handleSubmit} className="mx-auto w-full max-w-3xl">
+      <Card>
+        <CardHeader className="pb-0">
+          <div className="px-6">
+            <h2 className="text-xl font-semibold tracking-tight">New Post</h2>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Publish a new article — only UI has changed, your functionality stays the same.
+            </p>
+          </div>
+        </CardHeader>
 
-      <div className="mb-4">
-        <label className="block text-sm font-medium">Description</label>
-        <input value={description} onChange={(e) => setDescription(e.target.value)} className="mt-1 block w-full border rounded p-2" />
-      </div>
+        <CardContent className="pt-6">
+          <div className="grid gap-5">
+            <div className="grid gap-2">
+              <Label htmlFor="title">Title</Label>
+              <Input id="title" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="e.g. How to crack a finance interview" />
+            </div>
 
-      <div className="mb-4">
-        <label className="block text-sm font-medium">Content</label>
-        <textarea value={content} onChange={(e) => setContent(e.target.value)} className="mt-1 block w-full border rounded p-2 h-40" />
-      </div>
+            <div className="grid gap-2">
+              <Label htmlFor="description">Description</Label>
+              <Input id="description" value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Short summary shown in cards and search" />
+            </div>
 
-      <div className="mb-4">
-        <label className="block text-sm font-medium">Cover Image URL</label>
-        <input value={coverImage} onChange={(e) => setCoverImage(e.target.value)} placeholder="https://..." className="mt-1 block w-full border rounded p-2" />
-      </div>
+            <div className="grid gap-2">
+              <Label htmlFor="content">Content</Label>
+              <Textarea
+                id="content"
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
+                className="min-h-48"
+                placeholder="Write your article..."
+              />
+            </div>
 
-      <div className="mb-4">
-        <label className="block text-sm font-medium">Categories (comma separated)</label>
-        <input value={categoryInput} onChange={(e) => setCategoryInput(e.target.value)} placeholder="FINANCE, TECH" className="mt-1 block w-full border rounded p-2" />
-      </div>
+            <div className="grid gap-2">
+              <Label htmlFor="coverImage">Cover image URL</Label>
+              <Input id="coverImage" value={coverImage} onChange={(e) => setCoverImage(e.target.value)} placeholder="https://..." />
+            </div>
 
-      <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded" disabled={mutation.isPending}>
-        {mutation.isPending ? 'Saving...' : 'Save'}
-      </button>
+            <div className="grid gap-2">
+              <Label htmlFor="category">Categories (comma separated)</Label>
+              <Input id="category" value={categoryInput} onChange={(e) => setCategoryInput(e.target.value)} placeholder="FINANCE, TECH" />
+              <p className="text-xs text-muted-foreground">
+                Tip: these are uppercased automatically.
+              </p>
+            </div>
 
-      {mutation.isError && <div className="mt-2 text-red-600">Error creating blog</div>}
+            <div className="flex items-center justify-between gap-3 pt-2">
+              <Button type="button" variant="ghost" onClick={() => navigate(-1)}>
+                Cancel
+              </Button>
+
+              <div className="flex items-center gap-3">
+                {mutation.isError && (
+                  <div className="text-sm text-destructive">Error creating blog</div>
+                )}
+                <Button type="submit" disabled={mutation.isPending} className='cursor-pointer'>
+                  {mutation.isPending ? 'Saving…' : 'Publish'}
+                </Button>
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
     </form>
   )
 }

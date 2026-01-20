@@ -2,13 +2,18 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { api } from '../api'
 
 export type Blog = {
-  id?: number
+  id?: number | string
   title: string
   category: string[]
   description: string
   date?: string
   coverImage?: string
   content: string
+  author?: {
+    name?: string
+    avatar?: string
+    bio?: string
+  }
 }
 
 const BLOGS_KEY = ['blogs'] as const

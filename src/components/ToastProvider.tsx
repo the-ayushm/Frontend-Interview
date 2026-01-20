@@ -29,7 +29,14 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
         {toasts.map((t) => (
           <div
             key={t.id}
-            className={`px-4 py-2 rounded shadow text-white ${t.type === 'success' ? 'bg-green-600' : 'bg-red-600'}`}>
+            className={`min-w-[220px] rounded-lg border px-4 py-2 shadow-md ${
+              t.type === 'success'
+                ? 'border-primary/20 bg-primary text-primary-foreground'
+                : 'border-destructive/20 bg-destructive text-white'
+            }`}
+            role="status"
+            aria-live="polite"
+          >
             {t.message}
           </div>
         ))}

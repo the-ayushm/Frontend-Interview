@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom'
 import { useBlogs } from '../lib/hooks/blogs'
-import BlogCard from './BlogCard'
 import Skeleton from './Skeleton'
+import { Card, CardContent } from './ui/card'
+import { Badge } from './ui/badge'
 
 export default function BlogListAside() {
   const { data, isLoading } = useBlogs()
@@ -17,15 +18,30 @@ export default function BlogListAside() {
 
   return (
     <aside className="space-y-4">
-      <h2 className="text-lg font-semibold mb-2">Latest Articles</h2>
-      <div className="space-y-4">
+      <div className="flex items-center justify-between">
+        <h2 className="text-base font-semibold tracking-tight">Latest Articles</h2>
+        <span className="text-xs text-muted-foreground">{data?.length ?? 0}</span>
+      </div>
+
+      <div className="space-y-3">
         {data?.map((b) => (
           <Link key={b.id} to={`/blogs/${b.id}`} className="block">
-            <div className="p-3 rounded-lg border hover:shadow-sm bg-white">
-              <div className="text-xs text-gray-400 mb-1">{b.category?.slice(0,1).join(' | ')}</div>
-              <div className="font-medium">{b.title}</div>
-              <div className="text-sm text-gray-500 mt-2 line-clamp-2">{b.description}</div>
-            </div>
+            <Card className="overflow-hidden transition-shadow hover:shadow-md">
+              <CardContent className="p-4">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <div className="mb-2 flex flex-wrap items-center gap-2">
+                      <Badge variant="secondary" className="rounded-md">{b.category?.[0] ?? 'GENERAL'}</Badge>
+                      <span className="text-xs text-muted-foreground">
+                        {b.date ? new Date(b.date).toLocaleDateString() : ''}
+                      </span>
+                    </div>
+                    <div className="line-clamp-2 text-sm font-medium leading-snug">{b.title}</div>
+                    <div className="mt-2 line-clamp-2 text-sm text-muted-foreground">{b.description}</div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
           </Link>
         ))}
       </div>

@@ -3,15 +3,15 @@ import BlogListAside from './BlogListAside'
 
 export default function LayoutWithAside() {
   return (
-    <div className="container mx-auto px-4">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="md:col-span-1">
+    <div className="mx-auto w-full max-w-6xl px-4">
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-12">
+        <aside className="lg:col-span-4">
           <BlogListAside />
-        </div>
+        </aside>
 
-        <div className="md:col-span-2">
+        <main className="lg:col-span-8">
           <Outlet />
-        </div>
+        </main>
       </div>
     </div>
   )

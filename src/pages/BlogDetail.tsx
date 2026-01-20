@@ -2,7 +2,6 @@ import { useParams } from 'react-router-dom'
 import { useBlog } from '../lib/hooks/blogs'
 import Skeleton from '../components/Skeleton'
 import { Card, CardContent } from '../components/ui/card'
-import { Badge } from '../components/ui/badge'
 import { Button } from '../components/ui/button'
 import { Avatar, AvatarImage, AvatarFallback } from '../components/ui/avatar'
 import { useState } from 'react'
@@ -44,85 +43,82 @@ export default function BlogDetail() {
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-      <aside className="md:col-span-1">
-        <Card className="p-4">
-          <div className="text-sm text-gray-600">{data.category?.join(' | ')}</div>
-          <h3 className="font-semibold mt-3">{data.title}</h3>
-          <p className="text-gray-500 mt-2">{data.description}</p>
+    <div className="mx-auto w-full max-w-3xl">
+      {data.coverImage && (
+        <div className="overflow-hidden rounded-2xl border bg-card">
+          <img src={data.coverImage} alt="cover" className="h-72 w-full object-cover" />
+        </div>
+      )}
+
+      <div className="mt-6 flex items-start justify-between gap-4">
+        <div className="min-w-0">
+          <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">{data.title}</h1>
+          <p className="mt-2 text-sm text-muted-foreground sm:text-base">{data.description}</p>
+        </div>
+
+        <Button variant="secondary" size="sm" onClick={handleShare} className="cursor-pointer"
+        >
+          {copied ? 'Copied' : 'Share'}
+        </Button>
+      </div>
+
+      <div className="mt-5">
+        <Card>
+          <CardContent className="py-4">
+            <div className="grid grid-cols-1 gap-4 text-sm sm:grid-cols-3">
+              <div className="text-center">
+                <div className="text-xs text-muted-foreground">Category</div>
+                <div className="font-medium">{data.category?.join(', ') || 'GENERAL'}</div>
+              </div>
+              <div className="text-center">
+                <div className="text-xs text-muted-foreground">Read time</div>
+                <div className="font-medium">{readMins} min read</div>
+              </div>
+              <div className="text-center">
+                <div className="text-xs text-muted-foreground">Date</div>
+                <div className="font-medium">{data.date ? new Date(data.date).toLocaleDateString() : ''}</div>
+              </div>
+            </div>
+          </CardContent>
         </Card>
-      </aside>
+      </div>
 
-      <main className="md:col-span-2">
-        {/* Image */}
-        {data.coverImage && <img src={data.coverImage} alt="cover" className="w-full h-64 object-cover rounded-md mb-6" />}
+      <article className="mt-8 space-y-4 text-sm leading-7 text-foreground sm:text-base">
+        <p>{data.content}</p>
+      </article>
 
-        {/* Title + Share */}
-        <div className="flex items-start justify-between mb-4">
-          <div className="max-w-[70%]">
-            <h2 className="text-3xl font-extrabold mb-2">{data.title}</h2>
-            <div className="text-gray-500">{data.description}</div>
-          </div>
+      <div className="mt-10 border-t pt-8">
+        <div className="flex items-start gap-4">
+          <Avatar className="size-12">
+            {data.author?.avatar ? (
+              <AvatarImage src={data.author.avatar} alt={data.author?.name || 'Author'} />
+            ) : (
+              <AvatarFallback>
+                {(data.author?.name || 'AM')
+                  .split(' ')
+                  .map((n: string) => n[0])
+                  .slice(0, 2)
+                  .join('')}
+              </AvatarFallback>
+            )}
+          </Avatar>
 
-          <div>
-            <Button variant="default" size="sm" onClick={handleShare}>{copied ? 'Copied' : 'Share'}</Button>
-          </div>
-        </div>
-
-        {/* Meta card: Category / Read Time / Date */}
-        <div className="mb-6">
-          <Card>
-            <CardContent>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm text-gray-600">
-                <div className="text-center">
-                  <div className="text-xs text-gray-400">Category</div>
-                  <div className="font-medium">{data.category?.join(', ')}</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-xs text-gray-400">Read Time</div>
-                  <div className="font-medium">{readMins} min read</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-xs text-gray-400">Date</div>
-                  <div className="font-medium">{new Date(data.date || '').toLocaleDateString()}</div>
-                </div>
+          <div className="flex-1">
+            <div className="flex items-center justify-between gap-3">
+              <div className="min-w-0">
+                <div className="text-sm font-semibold">{data.author?.name || 'Arjun Mehta'}</div>
+                <div className="text-xs text-muted-foreground">Senior Financial Analyst</div>
               </div>
-            </CardContent>
-          </Card>
-        </div>
+              <FollowButton authorKey={data.author?.name || `blog-${id}`} />
+            </div>
 
-        {/* Article content */}
-        <article className="prose max-w-none">
-          <p className="mb-4">{data.content}</p>
-        </article>
-
-        {/* Author block with follow toggle */}
-        <div className="mt-8 border-t pt-6">
-          <div className="flex items-start gap-4">
-            <Avatar className="size-12">
-              {data.author?.avatar ? (
-                <AvatarImage src={data.author.avatar} alt={data.author?.name || 'Author'} />
-              ) : (
-                <AvatarFallback>{(data.author?.name || 'AM').split(' ').map(n => n[0]).slice(0,2).join('')}</AvatarFallback>
-              )}
-            </Avatar>
-
-            <div className="flex-1">
-              <div className="flex items-center justify-between">
-                <div>
-                  <div className="text-sm font-semibold">{data.author?.name || 'Arjun Mehta'}</div>
-                  <div className="text-xs text-gray-500">Senior Financial Analyst</div>
-                </div>
-                <div>
-                  <FollowButton authorKey={data.author?.name || `blog-${id}`} />
-                </div>
-              </div>
-
-              <div className="mt-3 text-sm text-gray-600">{data.author?.bio || 'Arjun writes about finance, fintech and accounting careers. He focuses on practical insights for professionals.'}</div>
+            <div className="mt-3 text-sm text-muted-foreground">
+              {data.author?.bio ||
+                'Arjun writes about finance, fintech and accounting careers. He focuses on practical insights for professionals.'}
             </div>
           </div>
         </div>
-      </main>
+      </div>
     </div>
   )
 }
@@ -148,6 +144,8 @@ function FollowButton({ authorKey }: { authorKey: string }) {
   }
 
   return (
-    <Button variant="default" size="sm" onClick={toggle}>{followed ? 'Unfollow' : 'Follow'}</Button>
+    <Button variant={followed ? 'secondary' : 'default'} size="sm" onClick={toggle}>
+      {followed ? 'Unfollow' : 'Follow'}
+    </Button>
   )
 }
