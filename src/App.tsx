@@ -6,13 +6,15 @@ import Navbar from './components/Navbar'
 import './App.css'
 import LayoutWithAside from './components/LayoutWithAside'
 import HomeMain from './pages/HomeMain'
+import ScrollToTop from './components/ScrollToTop'
 
 function App() {
   return (
     <BrowserRouter>
+    <ScrollToTop />
       <ToastProvider>
         <Navbar />
-        <div className="py-8">
+        <div className="pt-20 py-8">
           <header className="mx-auto mb-8 max-w-6xl px-4">
             <div className="rounded-2xl border bg-card p-6 sm:p-8">
               <div className="max-w-2xl">

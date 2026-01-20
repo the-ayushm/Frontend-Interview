@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { api } from '../api'
 
 export type Blog = {
-  id?: number | string
+  id?: string
   title: string
   category: string[]
   description: string

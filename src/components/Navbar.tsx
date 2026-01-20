@@ -1,48 +1,75 @@
 import { Link } from 'react-router-dom'
 import { Button } from './ui/button'
+import { useState } from 'react'
+import { Menu, X } from 'lucide-react'
 
 export default function Navbar() {
+  const [open, setOpen] = useState(false)
+
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/70">
+    <header className="fixed top-0 z-50 w-full border-b bg-background/80 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
-        <div className="flex items-center gap-3">
-          <Link
-            to="/"
-            className="inline-flex items-center gap-2 rounded-lg px-2 py-1 text-sm font-semibold tracking-tight hover:bg-accent"
-            aria-label="CA Monk home"
-          >
-            <span className="inline-flex size-8 items-center justify-center rounded-md bg-primary text-primary-foreground">
-              CA
-            </span>
-            <span className="hidden sm:inline">Monk Blog</span>
-          </Link>
+        
+        <Link
+          to="/"
+          className="inline-flex items-center gap-2 rounded-lg px-2 py-1 text-sm font-semibold"
+          onClick={() => setOpen(false)}
+        >
+          <span className="inline-flex size-8 items-center justify-center rounded-md bg-primary text-primary-foreground">
+            CA
+          </span>
+          <span className="hidden sm:inline">Monk Blog</span>
+        </Link>
 
-          <nav className="hidden md:flex items-center gap-1 text-sm">
-            <Link to="#" className="rounded-md px-3 py-2 text-muted-foreground hover:bg-accent hover:text-foreground">
-              Tools
+        <nav className="hidden md:flex items-center gap-1 text-sm">
+          {["Tools","Practice","Events","Job Board","Points"].map(item => (
+            <Link key={item} to="#" className="rounded-md px-3 py-2 text-muted-foreground hover:bg-accent">
+              {item}
             </Link>
-            <Link to="#" className="rounded-md px-3 py-2 text-muted-foreground hover:bg-accent hover:text-foreground">
-              Practice
-            </Link>
-            <Link to="#" className="rounded-md px-3 py-2 text-muted-foreground hover:bg-accent hover:text-foreground">
-              Events
-            </Link>
-            <Link to="#" className="rounded-md px-3 py-2 text-muted-foreground hover:bg-accent hover:text-foreground">
-              Job Board
-            </Link>
-            <Link to="#" className="rounded-md px-3 py-2 text-muted-foreground hover:bg-accent hover:text-foreground">
-              Points
-            </Link>
-          </nav>
-        </div>
+          ))}
+        </nav>
 
-        <div className="flex items-center gap-2">
-          <Button asChild size="sm" variant="ghost" className="hidden sm:inline-flex">
+        <div className="hidden md:flex items-center gap-2">
+          <Button asChild size="sm" variant="ghost">
             <Link to="/new">New Post</Link>
           </Button>
-          <Button variant="default" size="sm">Profile</Button>
+          <Button size="sm">Profile</Button>
         </div>
+
+        <button
+          className="md:hidden"
+          onClick={() => setOpen(!open)}
+        >
+          {open ? <X size={24}/> : <Menu size={24}/>}
+        </button>
       </div>
+
+      {open && (
+        <div className="md:hidden border-t bg-background px-4 pb-4">
+          {["Tools","Practice","Events","Job Board","Points"].map(item => (
+            <Link
+              key={item}
+              to="#"
+              className="block py-2 text-sm text-muted-foreground"
+              onClick={() => setOpen(false)}
+            >
+              {item}
+            </Link>
+          ))}
+
+          <Link
+            to="/new"
+            className="block py-2 text-sm font-medium"
+            onClick={() => setOpen(false)}
+          >
+            New Post
+          </Link>
+
+          <button className="mt-2 w-full rounded-md bg-primary py-2 text-sm text-primary-foreground">
+            Profile
+          </button>
+        </div>
+      )}
     </header>
   )
 }

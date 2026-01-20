@@ -1,16 +1,21 @@
-import { useParams } from 'react-router-dom'
 import { useBlog } from '../lib/hooks/blogs'
 import Skeleton from '../components/Skeleton'
 import { Card, CardContent } from '../components/ui/card'
 import { Button } from '../components/ui/button'
 import { Avatar, AvatarImage, AvatarFallback } from '../components/ui/avatar'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useParams, useNavigate } from 'react-router-dom'
+
 
 export default function BlogDetail() {
   const { id } = useParams()
   const { data, isLoading, isError, error } = useBlog(id)
   const [copied, setCopied] = useState(false)
+  const navigate = useNavigate()
 
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [id])
   if (isLoading)
     return (
       <div>
@@ -27,6 +32,7 @@ export default function BlogDetail() {
   const words = (data.content || '').split(/\s+/).filter(Boolean).length
   const readMins = Math.max(1, Math.ceil(words / 200))
 
+ 
   const handleShare = async () => {
     const url = `${window.location.origin}/blogs/${id}`
     try {
@@ -42,8 +48,16 @@ export default function BlogDetail() {
     }
   }
 
+
   return (
     <div className="mx-auto w-full max-w-3xl">
+       <Button
+      variant="ghost"
+      onClick={() => navigate(-1)}
+      className="mb-4 md:hidden"
+    >
+      ← Back
+    </Button>
       {data.coverImage && (
         <div className="overflow-hidden rounded-2xl border bg-card">
           <img src={data.coverImage} alt="cover" className="h-72 w-full object-cover" />
